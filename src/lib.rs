@@ -9,15 +9,13 @@ extern crate nalgebra as na;
 extern crate rapier2d as rapier;
 #[cfg(feature = "dim3")]
 extern crate rapier3d as rapier;
-#[macro_use]
-extern crate serde;
 
 #[wasm_bindgen::prelude::wasm_bindgen]
 pub fn version() -> String {
     env!("CARGO_PKG_VERSION").to_string()
 }
 
-pub mod control;
+//pub mod control;
 pub mod dynamics;
 pub mod geometry;
 pub mod math;

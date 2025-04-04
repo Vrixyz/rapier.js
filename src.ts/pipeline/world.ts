@@ -2,7 +2,6 @@ import {
     RawBroadPhase,
     RawCCDSolver,
     RawColliderSet,
-    RawDeserializedWorld,
     RawIntegrationParameters,
     RawIslandManager,
     RawImpulseJointSet,
@@ -11,8 +10,6 @@ import {
     RawPhysicsPipeline,
     RawQueryPipeline,
     RawRigidBodySet,
-    RawSerializationPipeline,
-    RawDebugRenderPipeline,
 } from "../raw";
 
 import {
@@ -50,21 +47,10 @@ import {
 import {Rotation, Vector, VectorOps} from "../math";
 import {PhysicsPipeline} from "./physics_pipeline";
 import {QueryFilterFlags, QueryPipeline} from "./query_pipeline";
-import {SerializationPipeline} from "./serialization_pipeline";
 import {EventQueue} from "./event_queue";
 import {PhysicsHooks} from "./physics_hooks";
-import {DebugRenderBuffers, DebugRenderPipeline} from "./debug_render_pipeline";
-import {
-    KinematicCharacterController,
-    PidAxesMask,
-    PidController,
-} from "../control";
+
 import {Coarena} from "../coarena";
-
-// #if DIM3
-import {DynamicRayCastVehicleController} from "../control";
-
-// #endif
 
 /**
  * The physics world.
@@ -85,13 +71,11 @@ export class World {
     ccdSolver: CCDSolver;
     queryPipeline: QueryPipeline;
     physicsPipeline: PhysicsPipeline;
-    serializationPipeline: SerializationPipeline;
-    debugRenderPipeline: DebugRenderPipeline;
-    characterControllers: Set<KinematicCharacterController>;
-    pidControllers: Set<PidController>;
+    //characterControllers: Set<KinematicCharacterController>;
+    //pidControllers: Set<PidController>;
 
     // #if DIM3
-    vehicleControllers: Set<DynamicRayCastVehicleController>;
+    //vehicleControllers: Set<DynamicRayCastVehicleController>;
 
     // #endif
 
@@ -113,13 +97,11 @@ export class World {
         this.ccdSolver.free();
         this.queryPipeline.free();
         this.physicsPipeline.free();
-        this.serializationPipeline.free();
-        this.debugRenderPipeline.free();
-        this.characterControllers.forEach((controller) => controller.free());
-        this.pidControllers.forEach((controller) => controller.free());
+        //this.characterControllers.forEach((controller) => controller.free());
+        //this.pidControllers.forEach((controller) => controller.free());
 
         // #if DIM3
-        this.vehicleControllers.forEach((controller) => controller.free());
+        //this.vehicleControllers.forEach((controller) => controller.free());
         // #endif
 
         this.integrationParameters = undefined;
@@ -133,14 +115,7 @@ export class World {
         this.multibodyJoints = undefined;
         this.queryPipeline = undefined;
         this.physicsPipeline = undefined;
-        this.serializationPipeline = undefined;
-        this.debugRenderPipeline = undefined;
-        this.characterControllers = undefined;
-        this.pidControllers = undefined;
 
-        // #if DIM3
-        this.vehicleControllers = undefined;
-        // #endif
     }
 
     constructor(
@@ -156,8 +131,6 @@ export class World {
         rawCCDSolver?: RawCCDSolver,
         rawQueryPipeline?: RawQueryPipeline,
         rawPhysicsPipeline?: RawPhysicsPipeline,
-        rawSerializationPipeline?: RawSerializationPipeline,
-        rawDebugRenderPipeline?: RawDebugRenderPipeline,
     ) {
         this.gravity = gravity;
         this.integrationParameters = new IntegrationParameters(
@@ -173,17 +146,11 @@ export class World {
         this.ccdSolver = new CCDSolver(rawCCDSolver);
         this.queryPipeline = new QueryPipeline(rawQueryPipeline);
         this.physicsPipeline = new PhysicsPipeline(rawPhysicsPipeline);
-        this.serializationPipeline = new SerializationPipeline(
-            rawSerializationPipeline,
-        );
-        this.debugRenderPipeline = new DebugRenderPipeline(
-            rawDebugRenderPipeline,
-        );
-        this.characterControllers = new Set<KinematicCharacterController>();
-        this.pidControllers = new Set<PidController>();
+        //this.characterControllers = new Set<KinematicCharacterController>();
+        //this.pidControllers = new Set<PidController>();
 
         // #if DIM3
-        this.vehicleControllers = new Set<DynamicRayCastVehicleController>();
+        //this.vehicleControllers = new Set<DynamicRayCastVehicleController>();
         // #endif
 
         this.impulseJoints.finalizeDeserialization(this.bodies);
@@ -191,68 +158,6 @@ export class World {
         this.colliders.finalizeDeserialization(this.bodies);
     }
 
-    public static fromRaw(raw: RawDeserializedWorld): World {
-        if (!raw) return null;
-
-        return new World(
-            VectorOps.fromRaw(raw.takeGravity()),
-            raw.takeIntegrationParameters(),
-            raw.takeIslandManager(),
-            raw.takeBroadPhase(),
-            raw.takeNarrowPhase(),
-            raw.takeBodies(),
-            raw.takeColliders(),
-            raw.takeImpulseJoints(),
-            raw.takeMultibodyJoints(),
-        );
-    }
-
-    /**
-     * Takes a snapshot of this world.
-     *
-     * Use `World.restoreSnapshot` to create a new physics world with a state identical to
-     * the state when `.takeSnapshot()` is called.
-     */
-    public takeSnapshot(): Uint8Array {
-        return this.serializationPipeline.serializeAll(
-            this.gravity,
-            this.integrationParameters,
-            this.islands,
-            this.broadPhase,
-            this.narrowPhase,
-            this.bodies,
-            this.colliders,
-            this.impulseJoints,
-            this.multibodyJoints,
-        );
-    }
-
-    /**
-     * Creates a new physics world from a snapshot.
-     *
-     * This new physics world will be an identical copy of the snapshoted physics world.
-     */
-    public static restoreSnapshot(data: Uint8Array): World {
-        let deser = new SerializationPipeline();
-        return deser.deserializeAll(data);
-    }
-
-    /**
-     * Computes all the lines (and their colors) needed to render the scene.
-     */
-    public debugRender(): DebugRenderBuffers {
-        this.debugRenderPipeline.render(
-            this.bodies,
-            this.colliders,
-            this.impulseJoints,
-            this.multibodyJoints,
-            this.narrowPhase,
-        );
-        return new DebugRenderBuffers(
-            this.debugRenderPipeline.vertices,
-            this.debugRenderPipeline.colors,
-        );
-    }
 
     /**
      * Advance the simulation by one time step.
@@ -459,111 +364,6 @@ export class World {
      */
     public createRigidBody(body: RigidBodyDesc): RigidBody {
         return this.bodies.createRigidBody(this.colliders, body);
-    }
-
-    /**
-     * Creates a new character controller.
-     *
-     * @param offset - The artificial gap added between the character’s chape and its environment.
-     */
-    public createCharacterController(
-        offset: number,
-    ): KinematicCharacterController {
-        let controller = new KinematicCharacterController(
-            offset,
-            this.integrationParameters,
-            this.bodies,
-            this.colliders,
-            this.queryPipeline,
-        );
-        this.characterControllers.add(controller);
-        return controller;
-    }
-
-    /**
-     * Removes a character controller from this world.
-     *
-     * @param controller - The character controller to remove.
-     */
-    public removeCharacterController(controller: KinematicCharacterController) {
-        this.characterControllers.delete(controller);
-        controller.free();
-    }
-
-    /**
-     * Creates a new PID (Proportional-Integral-Derivative) controller.
-     *
-     * @param kp - The Proportional gain applied to the instantaneous linear position errors.
-     *             This is usually set to a multiple of the inverse of simulation step time
-     *             (e.g. `60` if the delta-time is `1.0 / 60.0`).
-     * @param ki - The linear gain applied to the Integral part of the PID controller.
-     * @param kd - The Derivative gain applied to the instantaneous linear velocity errors.
-     *             This is usually set to a value in `[0.0, 1.0]` where `0.0` implies no damping
-     *             (no correction of velocity errors) and `1.0` implies complete damping (velocity errors
-     *             are corrected in a single simulation step).
-     * @param axes - The axes affected by this controller.
-     *               Only coordinate axes with a bit flags set to `true` will be taken into
-     *               account when calculating the errors and corrections.
-     */
-    public createPidController(
-        kp: number,
-        ki: number,
-        kd: number,
-        axes: PidAxesMask,
-    ): PidController {
-        let controller = new PidController(
-            this.integrationParameters,
-            this.bodies,
-            kp,
-            ki,
-            kd,
-            axes,
-        );
-        this.pidControllers.add(controller);
-        return controller;
-    }
-
-    /**
-     * Removes a PID controller from this world.
-     *
-     * @param controller - The PID controller to remove.
-     */
-    public removePidController(controller: PidController) {
-        this.pidControllers.delete(controller);
-        controller.free();
-    }
-
-    // #if DIM3
-    /**
-     * Creates a new vehicle controller.
-     *
-     * @param chassis - The rigid-body used as the chassis of the vehicle controller. When the vehicle
-     *                  controller is updated, it will change directly the rigid-body’s velocity. This
-     *                  rigid-body must be a dynamic or kinematic-velocity-based rigid-body.
-     */
-    public createVehicleController(
-        chassis: RigidBody,
-    ): DynamicRayCastVehicleController {
-        let controller = new DynamicRayCastVehicleController(
-            chassis,
-            this.bodies,
-            this.colliders,
-            this.queryPipeline,
-        );
-        this.vehicleControllers.add(controller);
-        return controller;
-    }
-
-    /**
-     * Removes a vehicle controller from this world.
-     *
-     * @param controller - The vehicle controller to remove.
-     */
-    public removeVehicleController(
-        controller: DynamicRayCastVehicleController,
-    ) {
-        this.vehicleControllers.delete(controller);
-        controller.free();
     }
 
     // #endif

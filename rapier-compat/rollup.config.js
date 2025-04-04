@@ -69,10 +69,10 @@ const config = (dim, features_postfix) => ({
 });
 
 export default [
-    config("2d", "2d"),
-    config("2d", "2d-deterministic"),
-    config("2d", "2d-simd"),
+    //config("2d", "2d"),
+    //config("2d", "2d-deterministic"),
+    //config("2d", "2d-simd"),
     config("3d", "3d"),
-    config("3d", "3d-deterministic"),
-    config("3d", "3d-simd"),
+   // config("3d", "3d-deterministic"),
+   // config("3d", "3d-simd"),
 ];
