@@ -96,9 +96,6 @@ name = "arrayvec"
 version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "autocfg"
@@ -107,31 +104,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 
 [[package]]
-name = "bincode"
-version = "1.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
-dependencies = [
- "serde",
-]
-
-[[package]]
 name = "bit-vec"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2c54ff287cfc0a34f38a6b832ea1bd8e448a330b3e40a50859e6488bee07f22"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "bitflags"
 version = "2.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f68f53c83ab957f72c32642f3868eec03eb974d1fb82e453128456482613d36"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "block-buffer"
@@ -369,85 +351,67 @@ dependencies = [
 
 [[package]]
 name = "dimforge_rapier2d"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
- "bincode",
  "js-sys",
  "nalgebra",
  "palette",
  "rapier2d",
- "ref-cast",
- "serde",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "dimforge_rapier2d-deterministic"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
- "bincode",
  "js-sys",
  "nalgebra",
  "palette",
  "rapier2d",
- "ref-cast",
- "serde",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "dimforge_rapier2d-simd"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
- "bincode",
  "js-sys",
  "nalgebra",
  "palette",
  "rapier2d",
- "ref-cast",
- "serde",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "dimforge_rapier3d"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
- "bincode",
  "js-sys",
  "nalgebra",
  "palette",
  "rapier3d",
- "ref-cast",
- "serde",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "dimforge_rapier3d-deterministic"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
- "bincode",
  "js-sys",
  "nalgebra",
  "palette",
  "rapier3d",
- "ref-cast",
- "serde",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "dimforge_rapier3d-simd"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
- "bincode",
  "js-sys",
  "nalgebra",
  "palette",
  "rapier3d",
- "ref-cast",
- "serde",
  "wasm-bindgen",
 ]
 
@@ -704,7 +668,6 @@ dependencies = [
  "num-complex",
  "num-rational",
  "num-traits",
- "serde",
  "simba",
  "typenum",
 ]
@@ -737,7 +700,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "73f88a1307638156682bada9d7604135552957b7818057dcef22705b4d509495"
 dependencies = [
  "num-traits",
- "serde",
 ]
 
 [[package]]
@@ -839,7 +801,6 @@ dependencies = [
  "num-traits",
  "ordered-float",
  "rustc-hash",
- "serde",
  "simba",
  "slab",
  "smallvec",
@@ -867,7 +828,6 @@ dependencies = [
  "ordered-float",
  "rstar",
  "rustc-hash",
- "serde",
  "simba",
  "slab",
  "smallvec",
@@ -1098,7 +1058,6 @@ dependencies = [
  "parry2d",
  "profiling",
  "rustc-hash",
- "serde",
  "simba",
  "thiserror 1.0.69",
  "vec_map",
@@ -1124,7 +1083,6 @@ dependencies = [
  "parry3d",
  "profiling",
  "rustc-hash",
- "serde",
  "simba",
  "thiserror 1.0.69",
  "vec_map",
@@ -1135,26 +1093,6 @@ name = "rawpointer"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60a357793950651c4ed0f3f52338f53b2f809f32d83a07f72909fa13e4c6c1e3"
-
-[[package]]
-name = "ref-cast"
-version = "1.0.24"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a0ae411dbe946a674d89546582cea4ba2bb8defac896622d6496f14c23ba5cf"
-dependencies = [
- "ref-cast-impl",
-]
-
-[[package]]
-name = "ref-cast-impl"
-version = "1.0.24"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1165225c21bff1f3bbce98f5a1f889949bc902d3575308cc7b0de30b4f6d27c7"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
 
 [[package]]
 name = "regex"

@@ -19,7 +19,6 @@
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawNarrowPhase",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawPhysicsPipeline",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawRigidBodySet",
-        "pkg/rapier_wasm{{ dimension }}d.d.ts:RawSerializationPipeline",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawContactManifold",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawShape",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawGenericJoint",
@@ -35,8 +34,6 @@
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawShapeContact",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawShapeCastHit",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawQueryPipeline",
-        "pkg/rapier_wasm{{ dimension }}d.d.ts:RawDeserializedWorld",
-        "pkg/rapier_wasm{{ dimension }}d.d.ts:RawDebugRenderPipeline",
         "pkg/rapier_wasm{{ dimension }}d.d.ts:RawContactForceEvent"
     ]
 }
